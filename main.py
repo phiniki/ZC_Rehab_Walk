@@ -114,7 +114,8 @@ class MyApp(ShowBase):
 
         cm = CardMaker('card')
         self.card = self.render.attachNewNode(cm.generate())
-        self.card.setPos(-1, -25, 0.25)
+        #self.card.setPos(-1, -25, 0.25)
+        self.card.setPos(0.25, -25, 0.25)
         self.card.setShaderOff(1)
         
         self.accept('escape', self.key_esc)
@@ -165,10 +166,12 @@ class MyApp(ShowBase):
     def Task_ImageDisplay(self, task):
         img_h, img_w, img_d = self.frame.shape
 
-        self.card.setScale(2, 1, 2*img_h/img_w)
+        #self.card.setScale(2, 1, 2*img_h/img_w)
+        self.card.setScale(1, 1, 1*img_w/img_h)
         
         tex = Texture()
-        tex.setup2dTexture(img_w, img_h, Texture.T_unsigned_byte, Texture.FRgb)
+        #tex.setup2dTexture(img_w, img_h, Texture.T_unsigned_byte, Texture.FRgb)
+        tex.setup2dTexture(img_h, img_w, Texture.T_unsigned_byte, Texture.FRgb)
 
         def is_present(body, lm_id):
             return body.presence[lm_id] > self.presence_threshold
@@ -191,7 +194,9 @@ class MyApp(ShowBase):
                         color = (0,0,255)
                     cv2.circle(self.frame, (x_y[0], x_y[1]), 4, color, -11)
 
-        tex.setRamImage(cv2.rotate(self.frame, cv2.ROTATE_180))
+        frame = cv2.rotate(self.frame, cv2.ROTATE_180)
+        #tex.setRamImage(cv2.rotate(self.frame, cv2.ROTATE_180))
+        tex.setRamImage(cv2.rotate(frame, cv2.ROTATE_90_COUNTERCLOCKWISE))
         self.card.setTexture(tex)
         return Task.cont
 
